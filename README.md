@@ -16,3 +16,9 @@ This command creates a _migrations_ folder which contains migration scripts
 3. Apply Changes to Database: `flask db upgrade`
 
 **Note:** Each time the database models change run the `migrate` and `upgrade` command
+
+## Setup Application
+
+1. Install dependencies: `pipenv install`
+2. Activate venv: `pipenv shell`
+3. Run Application: `python app.py`
