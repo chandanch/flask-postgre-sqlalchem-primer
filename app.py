@@ -2,31 +2,39 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
+from dotenv import load_dotenv
+
+# load env
+load_dotenv()
 
 # create an instance of flask
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_URI')}/{os.environ.get('DB_NAME')}"
+# set the sql alchemy URL in the flask app config
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    f"postgresql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}"
+    f"@{os.environ.get('DB_URI')}/{os.environ.get('DB_NAME')}"
+)
 
 # Create an insstance of SQL alchemy and bind the flask app instance to it
-database = SQLAlchemy(app)
+db = SQLAlchemy(app)
 
 # Create an instance of flask migration to handle db migrations
-mirgrate = Migrate(app, database)
+mirgrate = Migrate(app, db)
 
 
-class CarsModel(database.Model):
+class CarsModel(db.Model):
     """
         Cars Model
     """
     __tablename__ = 'cars'
 
-    id = database.Column(database.Integer, primary_key=True)
-    name = database.Column(database.String())
-    model = database.Column(database.String())
-    doors = database.Column(database.Integer())
-    engine = database.Column(database.String())
-    year = database.Column(database.Integer())
-    price = database.Column(database.Float())
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String())
+    model = db.Column(db.String())
+    doors = db.Column(db.Integer())
+    engine = db.Column(db.String())
+    year = db.Column(db.Integer())
+    price = db.Column(db.Float())
 
     def __init__(self, name, model, doors, engine, year) -> None:
         self.name = name
