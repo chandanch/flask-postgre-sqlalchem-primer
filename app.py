@@ -82,5 +82,26 @@ def create_car():
     }
 
 
+@app.route('/cars', methods=['GET'])
+def get_cars():
+    cars_results = CarsModel.query.all()
+    print(cars_results)
+    cars = [
+        {
+            'name': car.name,
+            'model': car.model,
+            'doors': car.doors,
+            'engine': car.engine,
+            'year': car.year,
+            'price': car.price
+        }
+        for car in cars_results
+    ]
+    return {
+        "total": len(cars),
+        "cars": cars
+    }
+
+
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
