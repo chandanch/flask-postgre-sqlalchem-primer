@@ -89,18 +89,7 @@ def get_cars():
     """
     cars_results = CarsModel.query.all()
     print(cars_results)
-    cars = [
-        {
-            'name': car.name,
-            'model': car.model,
-            'doors': car.doors,
-            'engine': car.engine,
-            'year': car.year,
-            'price': car.price,
-            'id': car.id
-        }
-        for car in cars_results
-    ]
+    cars = [response_builder(car) for car in cars_results]
     return {
         "total": len(cars),
         "cars": cars
@@ -113,6 +102,13 @@ def get_car_details(car_id):
         Get a specific car
     """
     car = CarsModel.query.get_or_404(car_id)
+    return response_builder(car)
+
+
+def response_builder(car):
+    """
+        Helper function that converts car model to dict
+    """
     return {
         'name': car.name,
         'model': car.model,
