@@ -73,7 +73,7 @@ def create_car():
     )
     # Establish session with DB & add new car to the session
     db.session.add(new_car)
-    # Save the new car in DB and close the session.
+    # Commits the transaction by saving the new car in DB and closes the session.
     # Close session will close the DB connection
     db.session.commit()
 
@@ -117,6 +117,47 @@ def response_builder(car):
         'year': car.year,
         'price': car.price,
         'id': car.id
+    }
+
+
+@app.route('/cars/<car_id>', methods=['PUT'])
+def update_car(car_id):
+    """
+        Updates cars details i.e.replace with new data in the DB
+    """
+    car = CarsModel.query.get_or_404(car_id)
+    data = request.get_json()
+
+    car.name = data['name'],
+    car.model = data['model'],
+    car.doors = data['doors'],
+    car.engine = data['engine'],
+    car.year = data['year'],
+    car.price = data['price']
+
+    db.session.add(car)
+    db.session.commit()
+
+    return {
+        'status': 'Success',
+        'message': f'{car.name} updated successfully'
+    }
+
+
+@app.route('/cars/<car_id>', methods=['DELETE'])
+def delete_car(car_id):
+    """
+        Delete the car based on ID from DB
+    """
+    car = CarsModel.query.get_or_404(car_id)
+
+    # delete the car using the db session
+    db.session.delete(car)
+    # Commit the transaction to reflect the changes in our DB
+    db.session.commit()
+
+    return {
+        'message': 'Success'
     }
 
 
