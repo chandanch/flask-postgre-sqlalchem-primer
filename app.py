@@ -84,6 +84,9 @@ def create_car():
 
 @app.route('/cars', methods=['GET'])
 def get_cars():
+    """
+        Get All cars
+    """
     cars_results = CarsModel.query.all()
     print(cars_results)
     cars = [
@@ -93,13 +96,31 @@ def get_cars():
             'doors': car.doors,
             'engine': car.engine,
             'year': car.year,
-            'price': car.price
+            'price': car.price,
+            'id': car.id
         }
         for car in cars_results
     ]
     return {
         "total": len(cars),
         "cars": cars
+    }
+
+
+@app.route('/cars/<car_id>', methods=['GET'])
+def get_car_details(car_id):
+    """
+        Get a specific car
+    """
+    car = CarsModel.query.get_or_404(car_id)
+    return {
+        'name': car.name,
+        'model': car.model,
+        'doors': car.doors,
+        'engine': car.engine,
+        'year': car.year,
+        'price': car.price,
+        'id': car.id
     }
 
 
